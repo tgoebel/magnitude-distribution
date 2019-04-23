@@ -1,5 +1,5 @@
 # magnitude-distribution
-FMD analysis modules in python
+FMD analysis module in python
 
 created: April 22 2019
 
