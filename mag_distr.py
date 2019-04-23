@@ -15,8 +15,6 @@ import matplotlib.pyplot as plt
 iRanSeed = 1234
 np.random.seed( iRanSeed)
 #-------fct. / module def-----------------------------------------------
-from FMD import * # for comparison
-old_fmd = FMD()
 from src.FMD_GR import *
 oFMD = FMD()
 
