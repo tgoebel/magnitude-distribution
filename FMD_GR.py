@@ -337,11 +337,13 @@ class FMD:
 
         #___________________________ distribution___________________________________________
         ax.semilogy( self.data['magBins'], self.data['magHist'], 'ks', ms = 5, mew = 1, label = 'histogram')
-        ax.semilogy( self.data['mag'], self.data['cumul'], 'bo', ms = 2, label='cumulative' )
+        sel  = self.data['mag'] > self.par['Mc'] - 1 # just one below completeness for fast plotting
+        ax.semilogy( self.data['mag'][sel], self.data['cumul'][sel], 'bo', ms = 2, label='cumulative' )
         #___________________________ plot completeness magnitude___________________________________________
         #get mag. bin corresponding to Mc
         sel = abs( self.data['mag'] - self.par['Mc']) == abs( self.data['mag'] - self.par['Mc']).min()
-        ax.plot( [self.par['Mc']], self.data['cumul'][sel], 'rv', ms = 10, label='$M_c = %.1f$' % (self.par['Mc']) )
+        #print len(sel), sel.sum(), len( self.data['cumul']), len( self.data['mag'])
+        ax.plot( [self.par['Mc']], [self.data['cumul'][sel][0]], 'rv', ms = 10, label='$M_c = %.1f$' % (self.par['Mc']) )
 
         mag_hat = np.linspace( self.data['mag'].min()-2*self.par['binsize'],
                                self.data['mag'].max()+2*self.par['binsize'], 10)
