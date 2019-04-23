@@ -3,7 +3,7 @@ FMD analysis module in python
 
 created: April 22 2019
 
-- analysis modules for magnitude distribution that follow Gutenberg_Richter relationship:
+- analyze magnitude distribution that follow Gutenberg_Richter relationship:
 log(N) = a - bM
 
 - find MC
