@@ -1,1 +1,1 @@
-Seismicity catalogs form Southern California
+Seismicity catalogs, Southern California
