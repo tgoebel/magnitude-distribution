@@ -10,6 +10,8 @@
 """
 from __future__ import division
 
+# some changes here check !!
+
 import numpy as np
 import matplotlib.pyplot as plt
 iRanSeed = 1234
