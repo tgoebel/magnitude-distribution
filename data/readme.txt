@@ -1,2 +1,2 @@
 Seismicity catalogs:
-hs_2011.txt - Southern California
+hs_1981_2011_all.mat - Southern California matlab binary
