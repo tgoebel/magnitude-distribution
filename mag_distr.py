@@ -5,7 +5,7 @@
 
       Functionality:
         1) create synthetic distribution
-           - select Mc, b and addNoise (Gaussian)
+           - select Mc, b and addNoise (Gaussian), important for Mc from KS-test for binned data
            
            @author tgoebel U of Memphis, 5/15/2019
 """
