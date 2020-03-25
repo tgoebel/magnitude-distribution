@@ -10,7 +10,6 @@
 
            @author tgoebel U of Memphis, 5/15/2019
 """
-from __future__ import division # include true division 
 import numpy as np
 import matplotlib.pyplot as plt
 import os
