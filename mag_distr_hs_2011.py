@@ -7,8 +7,9 @@
          for Southern California (1981 to 2011) (includes 2011-2017 datasets)
 
         http://scedc.caltech.edu/research-tools/altcatalogs.html
+        
+                   @author tgoebel U of Memphis, 5/15/2019
 """
-from __future__ import division
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +18,7 @@ import scipy.io
 np.random.seed(123456)
 #-------fct. / module def-----------------------------------------------
 
-from src.FMD_GR import *
+from src.FMD_GR import FMD
 oFMD = FMD()
 
 #============================================================================================================
@@ -28,8 +29,6 @@ file_in= os.path.join( dir_in, 'hs_1981_2011_all.mat')
 
 binsize = .1
 aMc     = np.arange(1.5, 5, binsize)  #'maxCurvature' #np.arange(1.5, 4, .05) #'KS' #'MC'#2.5
-
-
 
 #=========================================1==================================================================
 #                             load data
