@@ -1,4 +1,4 @@
-#python2.7
+#python 3.7
 """
     - fit mag distribution to So Cal data set from
         Hauksson & Shearer 2011:
