@@ -73,9 +73,9 @@ class FMD:
 
 
 
-    def get_Mc(self, mc_type='Mc', **kwargs):
+    def get_Mc(self, mc_type = 'MC', **kwargs):
         """ if mc_type is not specified, default behavior is max. curvature
-                   mc_type = 'maxCurvature' - max. event bin of histogram #default
+                   mc_type = 'maxCurvature' or 'MC' - max. event bin of histogram #--> default
                              'KS'           - use whole magnitude range to compute min. KS distance
                              'Std'          - deviation from linearity from moving std-window
 
@@ -344,7 +344,8 @@ class FMD:
         #get mag. bin corresponding to Mc
         sel = abs( self.data['mag'] - self.par['Mc']) == abs( self.data['mag'] - self.par['Mc']).min()
         #print( len(sel), sel.sum(), len( self.data['cumul']), len( self.data['mag'])
-        ax.plot( [self.par['Mc']], [self.data['cumul'][sel][0]], 'rv', ms = 10, label='$M_c = %.1f$' % (self.par['Mc']) )
+        ax.plot( [self.par['Mc']], [self.data['cumul'][sel][0]], 'rv', ms = 10,
+                 label= f"$M_c = {round(self.par['Mc'],1)}$")
 
         mag_hat = np.linspace( self.data['mag'].min()-2*self.par['binsize'],
                                self.data['mag'].max()+2*self.par['binsize'], 10)
