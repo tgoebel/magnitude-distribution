@@ -25,16 +25,16 @@ oFMD = FMD()
 #                             variables and files
 #============================================================================================================
 dir_in = '%s/data/quakeData/SCSN/relocated'%( os.path.expanduser( '~'))
-file_in= os.path.join( dir_in, 'hs_1981_2011_all.mat')
+file_in= 'hs_1981_2011_all.mat'
 
 binsize = .1
-aMc     = np.arange(1.5, 5, binsize)  #'maxCurvature' #np.arange(1.5, 4, .05) #'KS' #'MC'#2.5
+mc_type = np.arange(1.5, 5, binsize)  #'maxCurvature' 'KS' #'MC'#2.5
 
 #=========================================1==================================================================
 #                             load data
 #============================================================================================================
 
-dEq = scipy.io.loadmat( file_in, struct_as_record=False, squeeze_me=True)
+dEq = scipy.io.loadmat( f"{dir_in}/{file_in}", struct_as_record=False, squeeze_me=True)
 #print(  dEq.keys())
 oFMD.data['mag'] = dEq['Mag']
 print( 'no of events', len( dEq['Mag']))
@@ -45,7 +45,7 @@ print( 'no of events', len( dEq['Mag']))
 oFMD.mag_dist()
 a_RanErr = np.random.randn( len( dEq['Mag'])) * binsize*.4
 oFMD.data['mag'] += a_RanErr
-oFMD.get_Mc( aMc)
+oFMD.get_Mc( mc_type = mc_type)
 oFMD.data['mag'] -= a_RanErr
 
 print( 'completeness', round( oFMD.par['Mc'], 1))

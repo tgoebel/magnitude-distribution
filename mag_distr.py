@@ -1,4 +1,4 @@
-#python2.7
+# python3.7
 """
     - test FMD fitting by creating a synthetic exponential distribution
       and fitting it using the ML estimator
@@ -9,10 +9,6 @@
            
            @author tgoebel U of Memphis, 5/15/2019
 """
-from __future__ import division
-
-# some changes here check !!
-
 import numpy as np
 import matplotlib.pyplot as plt
 iRanSeed = 1234
@@ -24,12 +20,16 @@ oFMD = FMD()
 #============================================================================================================
 #                             variables and files
 #============================================================================================================
-N       = int( 5000)
-b       = 1.2
+N       = 5000
+b       = 1.1
 xmin    = 2.2
-f_sigma = .15 #uncertain: .15 * magBinsize
+f_sigma = .15
 
-aMc     = np.arange(1.5, 6, .05)  #'maxCurvature' #np.arange(1.5, 4, .05) #'KS' #'MC'#2.5
+# specify how completeness should be compute
+mc_type = np.arange(1.5, 6, .05)
+#1_ give range for misfit calculation:  np.arange(1.5, 6, .05)
+#2  histogram bin with most events: 'maxCurvature'
+#3  min. misfit calculated over whole data range 'KS'
 #=========================================1==================================================================
 #                             synthetic data
 #============================================================================================================
@@ -40,8 +40,8 @@ oFMD.data['mag'] += np.random.randn( N)*f_sigma
 #=========================================2==================================================================
 #                             determine Mc and b usign KS-test
 #============================================================================================================
-oFMD.mag_dist()
-oFMD.get_Mc( aMc)
+oFMD.mag_dist( )
+oFMD.get_Mc(  mc_type = mc_type)#'maxCurvature')
 
 print( 'completeness', round( oFMD.par['Mc'], 1))
 oFMD.fit_GR( binCorrection = 0)
