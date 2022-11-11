@@ -1,4 +1,4 @@
-#python2.7
+#python 3.7
 """
     - fit mag distribution to So Cal data set from
         Hauksson & Shearer 2011:
@@ -7,8 +7,9 @@
          for Southern California (1981 to 2011) (includes 2011-2017 datasets)
 
         http://scedc.caltech.edu/research-tools/altcatalogs.html
+        
+                   @author tgoebel U of Memphis, 5/15/2019
 """
-from __future__ import division
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,25 +18,23 @@ import scipy.io
 np.random.seed(123456)
 #-------fct. / module def-----------------------------------------------
 
-from src.FMD_GR import *
+from src.FMD_GR import FMD
 oFMD = FMD()
 
 #============================================================================================================
 #                             variables and files
 #============================================================================================================
 dir_in = '%s/data/quakeData/SCSN/relocated'%( os.path.expanduser( '~'))
-file_in= os.path.join( dir_in, 'hs_1981_2011_all.mat')
+file_in= 'hs_1981_2011_all.mat'
 
 binsize = .1
-aMc     = np.arange(1.5, 5, binsize)  #'maxCurvature' #np.arange(1.5, 4, .05) #'KS' #'MC'#2.5
-
-
+mc_type = np.arange(1.5, 5, binsize)  #'maxCurvature' 'KS' #'MC'#2.5
 
 #=========================================1==================================================================
 #                             load data
 #============================================================================================================
 
-dEq = scipy.io.loadmat( file_in, struct_as_record=False, squeeze_me=True)
+dEq = scipy.io.loadmat( f"{dir_in}/{file_in}", struct_as_record=False, squeeze_me=True)
 #print(  dEq.keys())
 oFMD.data['mag'] = dEq['Mag']
 print( 'no of events', len( dEq['Mag']))
@@ -46,7 +45,7 @@ print( 'no of events', len( dEq['Mag']))
 oFMD.mag_dist()
 a_RanErr = np.random.randn( len( dEq['Mag'])) * binsize*.4
 oFMD.data['mag'] += a_RanErr
-oFMD.get_Mc( aMc)
+oFMD.get_Mc( mc_type = mc_type)
 oFMD.data['mag'] -= a_RanErr
 
 print( 'completeness', round( oFMD.par['Mc'], 1))

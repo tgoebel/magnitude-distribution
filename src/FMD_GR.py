@@ -7,8 +7,9 @@
       - std error
       - distribution plots
 
+
+           @author tgoebel U of Memphis, 5/15/2019
 """
-from __future__ import division # include true division 
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -45,7 +46,6 @@ class FMD:
 
 
     """
-
     def __init__(self):
         self.data = { 'mag'     : np.array([]),
                       # hist and cumul distribution
@@ -70,11 +70,9 @@ class FMD:
             error_str = 'Mc not found, run function getMc() first'
             raise ValueError( error_str)
 
-
-
-    def get_Mc(self, mc_type=None, **kwargs):
+    def get_Mc(self, mc_type = 'MC', **kwargs):
         """ if mc_type is not specified, default behavior is max. curvature
-                   mc_type = 'maxCurvature' - max. event bin of histogram #default
+                   mc_type = 'maxCurvature' or 'MC' - max. event bin of histogram #--> default
                              'KS'           - use whole magnitude range to compute min. KS distance
                              'Std'          - deviation from linearity from moving std-window
 
@@ -84,10 +82,7 @@ class FMD:
                                                      mc_type = np.arange( 2, 4.1, .1) # find Mc between 2 and 4 using data spacing
                              """
         N = len( self.data['mag'])
-        if mc_type == None: #go to default = MC
-            mc_type = 'MC'
-
-        if isinstance( mc_type, basestring ):
+        if isinstance( mc_type, (str)):
             if mc_type == 'maxCurvature' or mc_type == 'MC':
                 # MC from maximum curvature
                 self.mag_dist()
@@ -99,10 +94,10 @@ class FMD:
                 error_str = "completeness type unknown:, %s, use 'KS, float, maxCurvature (or MC) or array for KS test" %( mc_type)
                 raise ValueError(  error_str)
 
-        elif isinstance( mc_type, ( float, int ) ):
+        elif isinstance( mc_type, (float, int) ):
             self.par['Mc']      = float( mc_type )
 
-        elif isinstance( mc_type, ( np.ndarray, list ) ):#use KS stats for data within min. max. values
+        elif isinstance( mc_type, (np.ndarray, list) ):#use KS stats for data within min. max. values
             if np.array( mc_type).shape[0] > 2:
                 self.par['Mc'] = self.Mc_KS( mc_type,  **kwargs)
             else:
@@ -130,9 +125,8 @@ class FMD:
 
         self.data['magBins'] = np.arange( round( self.data['mag'].min(), 1), self.data['mag'].max()+self.par['binsize'] , self.par['binsize'])
         self.data['magHist'], __ = np.histogram( self.data['mag'], self.data['magBins'])
-        #make sure rate and bin vector have the same length
-        mRate_Bins          = np.array(zip(*zip( self.data['magBins'], self.data['magHist'])))
-        self.data['magBins'], self.data['magHist'] = mRate_Bins[0], mRate_Bins[1]
+        #switch to central bin instead of min, max from numpy
+        self.data['magBins'] = self.data['magBins'][0:-1]+self.par['binsize']*.5
 
     def fit_GR(self, **kwargs):
         """  - basic MLE solution for b-value, compute a and stddev
@@ -209,7 +203,11 @@ class FMD:
             curr_b        = ( 1. / ( meanMag - ( curr_Mc - binCorrection)) ) * np.log10( np.e )#self.MLE_b( curr_Mc)
             vKS_stats[i]  = self.KS_D_value_PL( curr_Mc)
             sel = sorted_Mag >= curr_Mc
-            vStd_err[i]   = ( 2.3 * np.sqrt((sum((self.data['mag'][sel_Mc]-meanMag)**2) ) / ( sel_Mc.sum()* (sel_Mc.sum()-1))) ) * curr_b**2
+            N_aboveMc = sel.sum()
+            if N_aboveMc > 1:
+                vStd_err[i]   = ( 2.3 * np.sqrt((sum((self.data['mag'][sel_Mc]-meanMag)**2) ) / ( N_aboveMc* (N_aboveMc-1))) ) * curr_b**2
+            else:
+                vStd_err[i]   = 999
             vB_sim[i]     = curr_b
             i = i + 1
         # store in data dictionary to be called with self.plotKS
@@ -342,8 +340,9 @@ class FMD:
         #___________________________ plot completeness magnitude___________________________________________
         #get mag. bin corresponding to Mc
         sel = abs( self.data['mag'] - self.par['Mc']) == abs( self.data['mag'] - self.par['Mc']).min()
-        #print len(sel), sel.sum(), len( self.data['cumul']), len( self.data['mag'])
-        ax.plot( [self.par['Mc']], [self.data['cumul'][sel][0]], 'rv', ms = 10, label='$M_c = %.1f$' % (self.par['Mc']) )
+        #print( len(sel), sel.sum(), len( self.data['cumul']), len( self.data['mag'])
+        ax.plot( [self.par['Mc']], [self.data['cumul'][sel][0]], 'rv', ms = 10,
+                 label= f"$M_c = {round(self.par['Mc'],1)}$")
 
         mag_hat = np.linspace( self.data['mag'].min()-2*self.par['binsize'],
                                self.data['mag'].max()+2*self.par['binsize'], 10)
