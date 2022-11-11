@@ -46,7 +46,6 @@ class FMD:
 
 
     """
-
     def __init__(self):
         self.data = { 'mag'     : np.array([]),
                       # hist and cumul distribution
@@ -70,8 +69,6 @@ class FMD:
         if self.par['Mc'] == None:
             error_str = 'Mc not found, run function getMc() first'
             raise ValueError( error_str)
-
-
 
     def get_Mc(self, mc_type = 'MC', **kwargs):
         """ if mc_type is not specified, default behavior is max. curvature
